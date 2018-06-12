@@ -23,7 +23,7 @@ class SalesPlanActivityController extends Controller
      */
     public function index()
     {
-        return view('salesplan.activity');
+        return view('salesplan.calendar');
     }
 
 }

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}">
 </head>
 <body>
@@ -30,7 +31,7 @@
                 @endauth
 
                 <a class="navbar-brand d-none d-sm-none d-md-block mr-5" href="#" style="margin-top: -10px; margin-bottom: -10px;">
-                    <img src="img/telkomsel-logo.png" width="170" height="50" alt="">
+                    <img src="{{ URL::to('img/telkomsel-logo.png') }}" width="170" height="50" alt="">
                 </a>
                 <a class="navbar-brand" href="#">CAM INFORMATION SYSTEM</a>
                 
@@ -50,8 +51,8 @@
             @auth
             <div id="sidebar">
                 <ul class="sidebar-menu">
-                    <li class=" @yield('menu_salesplan') "><a href=" {{ url('sales-plan-activity') }} ">Sales Plain Activity</a></li>
-                    <li class=" @yield('menu_lead') "><a href="">Lead</a></li>
+                    <li class=" @yield('menu_salesplan') "><a href=" {{ url('/') }} ">Sales Plain Activity</a></li>
+                    <li class=" @yield('menu_lead') "><a href="{{ url('lead') }}">Lead</a></li>
                     <li class=" @yield('menu_opportunity') "><a href="">Opportunity</a></li>
                     <li class=" @yield('menu_quote') "><a href="">Quote</a></li>
                 </ul>
@@ -122,6 +123,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
         <script src="{{ asset('assets/js/core.js') }}"></script>
 
         <script>
@@ -156,5 +158,7 @@
 
             });
         </script>
+
+        @yield('script')
 </body>
 </html>

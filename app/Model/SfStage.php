@@ -14,6 +14,7 @@ class SfStage extends Model
 
 	protected $table = 'sf_stage';
 	protected $primaryKey = 'sf_opstage_id';
+    protected $fillable = ['sf_project_id','sf_opstage_startdate','sf_opstage_enddate','sf_opstage_ref_id'];
 
     public function project()
     {

@@ -11,12 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', 'SalesPlanActivityController@index');
 
 Auth::routes();
 
-Route::get('/sales-plan-activity', 'SalesPlanActivityController@index');
+Route::get('/lead', 'LeadController@index');
+Route::get('/kanban', 'LeadController@kanban');
+Route::get('/add-new-lead', 'LeadController@create');
+Route::post('/save-lead', 'LeadController@store');
 
 
