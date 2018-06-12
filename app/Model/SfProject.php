@@ -14,7 +14,7 @@ class SfProject extends Model
 
 	protected $table = 'sf_project';
 	protected $primaryKey = 'sf_project_id';
-    protected $fillable = ['mpp_code','sf_name','office_id','lc_id'];
+    protected $fillable = ['sf_name','lc_id','sf_service_type','sf_service_group','sf_service_subgroup','sf_initiator','sf_finalized','sf_est_close_date','sf_pic_name_temp','sf_pic_phone_temp','mpp_code','office_id'];
 
     public function company()
     {

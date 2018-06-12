@@ -64,6 +64,9 @@ a, a:hover, a:focus {
     text-decoration: none;*/
     transition: all 0.3s;
 }
+.form-control {
+	font-size: 13px !important;
+}
 
 .navbar-custom {
 	background-color: #fff !important;
@@ -123,6 +126,7 @@ a, a:hover, a:focus {
     top: 0;
     right: 0;
     margin-top: 57px;
+    margin-bottom: 50px;
 }
 
 #content.active {
@@ -258,7 +262,47 @@ a, a:hover, a:focus {
 	height: 100px;
 }
 
-/*tambahan*/
-.py-4 {
-    padding-top: 5.5rem!important;
+.list-tab {
+	margin: 0 0 50px;
+	padding: 0;
+	display: block;
+	text-align: center;
+}
+.list-tab>li {
+	cursor: pointer;
+	display: inline;
+	margin: 0 5px 0 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	border-bottom: 3px #ddd solid;
+}
+.list-tab>li>a {
+	text-decoration: none;
+	color: #797979;
+}
+.list-tab>li:hover, .list-tab>.active  {
+	border-bottom: 3px #dc3545 solid;
+
+}
+
+.tab .content-tab {
+	display: none;
+}
+.tab .content-tab.active {
+	display: block;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+	background-color: #eee !important;
+	color: #797979 !important;
+}
+
+.nav-pills .nav-link {
+	color: #797979 !important; 
+}
+
+.dropdown-item {
+	font-size: 13px !important; 
 }

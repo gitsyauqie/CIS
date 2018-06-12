@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Model\LegalCompany;
 use App\Model\SfProject;
 use App\Model\SfStage;
+use App\Model\SfBudgetinfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class LeadController extends Controller
 {
@@ -62,10 +64,17 @@ class LeadController extends Controller
      */
     public function create()
     {
-        $lc_name =  DB::table('legal_company')->pluck('lc_account_id','lc_id')->toArray(); 
-        $office_name =  DB::table('legal_office')->pluck('office_name')->toArray();
+        $lc_name =  DB::table('legal_company')
+                         ->pluck('lc_account_id','lc_id')
+                         ->toArray(); 
+        $office_name =  DB::table('legal_office')
+                         ->pluck('office_name','office_id')
+                         ->toArray();
+        $stage_reference =  DB::table('sf_stage_reference')
+                         ->pluck('sf_opstage_ref_name','sf_opstage_ref_id')
+                         ->toArray();
 
-        return view('lead.form_create', compact('lc_name','office_name'));
+        return view('lead.form_create', compact('lc_name','office_name','stage_reference'));
     }
 
     /**
@@ -76,14 +85,13 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
-        $sf_project = SfProject::create($request->all() + ['mpp_code'=> 'MPP_A1_SBS_02']);
-        $sf_stage = [
-            'sf_project_id' => $sf_project->sf_project_id,
-            'sf_opstage_ref_id' => '1',
-            'sf_opstage_startdate' => $request->sf_opstage_startdate,
-            'sf_opstage_enddate' => $request->sf_opstage_enddate
-        ];
-        SfStage::create($sf_stage);
+        $sf_project = SfProject::create($request->all() + ['mpp_code'=>'1']);
+        $sf_stage   = SfStage::create($request->all() + [
+                                'sf_opstage_enddate' => date('0000-00-00'), 
+                                'sf_project_id' => $sf_project->sf_project_id]);
+        SfBudgetinfo::create($request->all() + [
+                                'sf_project_id' => $sf_project->sf_project_id,
+                                'sf_opstage_id' => $sf_stage->sf_opstage_id]);
 
         return redirect('/lead');
 
