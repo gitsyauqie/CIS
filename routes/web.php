@@ -19,5 +19,6 @@ Route::get('/lead', 'LeadController@index');
 Route::get('/kanban', 'LeadController@kanban');
 Route::get('/add-new-lead', 'LeadController@create');
 Route::post('/save-lead', 'LeadController@store');
+Route::get('/save-stage/{id}', 'LeadController@save_stage');
 
 

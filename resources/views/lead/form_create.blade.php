@@ -3,7 +3,6 @@
 @section('menu_lead', 'active')
 
 @section('content')
-<div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -41,9 +40,9 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-9">
-                                            <select name="lc_id" class="select2 custom-select">
+                                            <select name="lc_id" class="select2 custom-select" id="Project_name_select">
                                             @foreach ($lc_name as $key => $row)
-                                                <option value="{{ $key }}">{{ $row }}</option>
+                                                <option value="{{ $key }}" nameattr="{{ $row }}">{{ $row }}</option>
                                             @endforeach
                                             </select>
                                         </div>
@@ -158,26 +157,11 @@
                                         <label for="input20" class="col-sm-12 col-form-label">Corporate Name</label>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-9 pl-5">
-                                            <div class="custom-control custom-checkbox mt-1">
-                                              <input type="checkbox" class="custom-control-input" id="customCheck3">
-                                              <label class="custom-control-label" for="customCheck3">New Attack</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 pl-5">
-                                            <div class="custom-control custom-checkbox mt-1">
-                                              <input type="checkbox" class="custom-control-input" id="customCheck4">
-                                              <label class="custom-control-label" for="customCheck4">Exiting</label>
-                                            </div>
-                                        </div>
+                                        <label class="col-sm-3 pl-5 col-form-label">
+                                            Project Name
+                                        </label>
                                         <div class="col-sm-9">
-                                            <select name="lc_id" class="select2 custom-select">
-                                            @foreach ($lc_name as $key => $row)
-                                                <option value="{{ $key }}">{{ $row }}</option>
-                                            @endforeach
-                                        </select>
+                                            <div id="Project_name_show"></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -206,12 +190,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="input24" class="col-sm-3 col-form-label pl-md-5">Service Duration</label>
-                                        <div class="col-sm-9">
-                                            <input type="number" class="form-control" name="input24" id="input24" placeholder="0">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
                                         <label for="input25" class="col-sm-3 col-form-label pl-md-5">Quantity</label>
                                         <div class="col-sm-9">
                                             <input type="number" class="form-control" name="sf_budget_quantity" id="input25" placeholder="0">
@@ -227,12 +205,6 @@
                                         <label for="input27" class="col-sm-3 col-form-label pl-md-5">Estimation</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="sf_budget_estimation" id="input27" placeholder="0">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="input28" class="col-sm-3 col-form-label pl-md-5">Treat. Anomali</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="input28" id="input28" placeholder="Treatment for Anomali...">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -258,49 +230,7 @@
                                             <input type="text" class="form-control" name="sf_pic_phone_temp" id="input32" placeholder="08xxx...">
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="input33" class="col-sm-12 col-form-label">Collection</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-9 pl-4">
-                                            <div class="custom-control custom-checkbox mt-1">
-                                              <input type="checkbox" class="custom-control-input" id="customCheck5">
-                                              <label class="custom-control-label" for="customCheck5">Personal Paid</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 pl-4">
-                                            <div class="custom-control custom-checkbox mt-1">
-                                              <input type="checkbox" class="custom-control-input" id="customCheck6">
-                                              <label class="custom-control-label" for="customCheck6">Corporate Paid</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 pl-5">
-                                            <div class="custom-control custom-checkbox mt-1">
-                                              <input type="checkbox" class="custom-control-input" id="customCheck7">
-                                              <label class="custom-control-label" for="customCheck7">TCOPS</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 pl-5">
-                                            <div class="custom-control custom-checkbox mt-1">
-                                              <input type="checkbox" class="custom-control-input" id="customCheck8">
-                                              <label class="custom-control-label" for="customCheck8">S. Integrator</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <select class="custom-select" name="input33" id="input33">
-                                                <option>- Select Corporate Name -</option>
-                                                <option value="1" selected>PT. Nestle Indonesia</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="form-group row">
                                         <label for="input34" class="col-sm-12 col-form-label">End Service Treatment</label>
                                     </div>
@@ -334,7 +264,6 @@
         	</div>
         </div>
     </div>
-</div>
    
 
     

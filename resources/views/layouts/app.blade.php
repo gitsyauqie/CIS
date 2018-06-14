@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.4.2/sweetalert2.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}">
 </head>
 <body>
@@ -22,13 +23,13 @@
         <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light navbar-custom">
             <div class="container-fluid">
                 
-                @auth
+                <!-- @auth -->
                 <a href="#" class="mr-5" id="btn-toggles">
                     <div class="icon-toggle-1"></div>
                     <div class="icon-toggle-2"></div>
                     <div class="icon-toggle-2"></div>
                 </a>
-                @endauth
+                <!-- @endauth -->
 
                 <a class="navbar-brand d-none d-sm-none d-md-block mr-5" href="#" style="margin-top: -10px; margin-bottom: -10px;">
                     <img src="{{ URL::to('img/telkomsel-logo.png') }}" width="170" height="50" alt="">
@@ -48,7 +49,7 @@
 
         <div id="wrapper">
 
-            @auth
+            <!-- @auth -->
             <div id="sidebar">
                 <ul class="sidebar-menu">
                     <li class=" @yield('menu_salesplan') "><a href=" {{ url('/') }} ">Sales Plain Activity</a></li>
@@ -57,7 +58,7 @@
                     <li class=" @yield('menu_quote') "><a href="">Quote</a></li>
                 </ul>
             </div>
-            @endauth
+            <!-- @endauth -->
             
             <div id="content">
             @yield('content')
@@ -66,14 +67,7 @@
         </div>
     </div>
 
-    <!-- Button PopoverButton Popover -->
-        <div class="container" id="button-pop" hidden>
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-outline-secondary btn-sm pl-4 pr-4">List</button>
-              <button type="button" class="btn btn-secondary btn-sm pl-3 pr-3">Kanban</button>
-            </div>
-        </div>
-        <!-- Button PopoverButton Popover End-->
+        
         
         <!-- List PopoverButton Popover -->
         <div class="container" id="list-pop" hidden>
@@ -124,37 +118,105 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.4.2/sweetalert2.min.js"></script>
         <script src="{{ asset('assets/js/core.js') }}"></script>
 
         <script>
+            
             $( function() {
 
-                $( "#sortable1, #sortable2, #sortable3, #sortable4, #sortable5, #sortable6, #sortable7, #sortable8").sortable({
-                    connectWith: ".col-md-3",
+                $( ".sortable").sortable({
+                    connectWith: ".sortable-connected",
                     cancel: ".fixed",
                     placeholder: "portlet-placeholder ui-corner-all",
                     cursor: "move", cursorAt: { top: 56, left: 56 },
-                    stop: function(){
-                        $('#myModal').modal('show');
-                        $('#form-submit').click(function(e){
-                            e.preventDefault();
-                            dialog_confirm_callback(true);
-                            $('#myModal').modal('hide');
-                        })
-                        $('#cancel').click(function(){
-                            $("#sortable1, #sortable2, #sortable3, #sortable4, #sortable5, #sortable6").sortable('cancel');
-                            dialog_confirm_callback(true);
-                        })
+                    receive: function(event, ui){
+                        target = ui.item.parent('div').prev('p').text();
+                        target_stage = ui.item.parent('div').attr('stage-id');
+                    },
+                    stop: function(e){
 
+                        var length = $(this).find('div.card').length;
+                        var bank   = $(this).parent('div').find('p').text();
+                        var content = $(this).closest('div.card');
+                        var dataid =  $(this).attr('data-id');
+
+                        if (length < 1) {
+                            content.hide();
+                        }
+
+                        swal({
+                            //title: 'Ada yakin akan menggeser ?',
+                            text: "Ada yakin akan menggeser?" +dataid,
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes',
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }).then(function() {
+                            save_stage(dataid,target_stage);
+
+                            // if (target != bank) {
+                                
+                            //     dialog_confirm_callback(false);
+
+                            //     swal(
+                            //       'Gagal!',
+                            //       'Pilih sesuai perusahaan',
+                            //       'error'
+                            //     )
+
+                            //     if (length < 1) {
+                            //         content.show();
+                            //     }
+                            // }
+                            // else {
+                            //     dialog_confirm_callback(true);
+                            //     swal(
+                            //       'Berhasil!',
+                            //       'Anda berhasil menggeser!',
+                            //       'success'
+                            //     )
+                            // }
+                        }, function(dismiss) {
+                            if (dismiss === 'cancel') { // you might also handle 'close' or 'timer' if you used those
+                                $(".sortable").sortable('cancel');
+                                dialog_confirm_callback(false);
+                                
+                                if (length < 1) {
+                                    content.show();
+                                }
+                            } 
+                            else {
+                                throw dismiss;
+                            }
+                        })
                     }
                 });
 
                 function dialog_confirm_callback(value) {
                     if (value) {} else {
-                        $("#sortable1, #sortable2, #sortable3, #sortable4, #sortable5, #sortable6, #sortable7, #sortable8").sortable('cancel');
+                        $(".sortable").sortable('cancel');
                     }
                 }
-                $("#sortable1, #sortable2, #sortable3, #sortable4, #sortable5, #sortable6, #sortable7, #sortable8").sortable({});
+                $(".sortable").sortable({});
+
+                function save_stage(dataid, target){
+
+                    $.ajax({
+                                url : "http:{{ url('/save-stage/') }}/"+ dataid+"/?ref-id="+target,
+                                type : 'GET',
+                                success : function(data){
+                                    location.reload();
+                                },
+                                error : function(data){
+                                    console.log(data);
+                                },
+                            }
+                        );
+                }
 
             });
         </script>

@@ -20,7 +20,7 @@ class LeadController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -35,7 +35,8 @@ class LeadController extends Controller
                         ->leftjoin('legal_office', 'legal_office.lc_id', '=', 'legal_company.lc_id')
                         ->leftjoin('legal_province', 'legal_province.province_id', '=', 'legal_office.office_province')
                         ->leftjoin('sf_stage', 'sf_stage.sf_project_id', '=', 'sf_project.sf_project_id')
-                        ->select('sf_project.sf_name', 'legal_company.lc_account_id', 'legal_province.province_desc','sf_stage.sf_opstage_startdate')
+                        ->leftjoin('sf_stage_reference', 'sf_stage_reference.sf_opstage_ref_id', '=', 'sf_stage.sf_opstage_ref_id')
+                        ->select('sf_project.sf_name', 'legal_company.lc_account_id', 'legal_province.province_desc','sf_stage.sf_opstage_startdate','legal_company.lc_telp','sf_project.sf_pic_name_temp','sf_stage_reference.sf_opstage_ref_name')
                         ->orderBy('sf_project.sf_project_id', 'desc')
                         ->get();
 
@@ -44,17 +45,29 @@ class LeadController extends Controller
 
     public function kanban()
     {
-        $project = DB::table('sf_project')
+        // Kanban Lead
+        $project_lead_select = DB::table('sf_project')
                         ->leftjoin('legal_company', 'legal_company.lc_id', '=', 'sf_project.lc_id')
                         ->leftjoin('legal_office', 'legal_office.lc_id', '=', 'legal_company.lc_id')
                         ->leftjoin('legal_province', 'legal_province.province_id', '=', 'legal_office.office_province')
                         ->leftjoin('sf_stage', 'sf_stage.sf_project_id', '=', 'sf_project.sf_project_id')
-                        ->select('legal_company.lc_id', 'sf_project.sf_project_id', 'sf_project.sf_name', 'legal_company.lc_account_id')
+                        ->leftjoin('sf_stage_reference', 'sf_stage_reference.sf_opstage_ref_id', '=', 'sf_stage.sf_opstage_ref_id')
+                        ->leftjoin('sf_budget_info', 'sf_budget_info.sf_opstage_id', '=', 'sf_stage.sf_opstage_id')
+                        ->select('legal_company.lc_id','sf_project.sf_project_id','sf_project.sf_name','legal_company.lc_account_id','sf_budget_info.sf_budget_allocation')
+                        ->orderBy('sf_stage.sf_opstage_startdate', 'desc')
+                        ->where('sf_stage_reference.sf_opstage_ref_id', '=', '1')
                         ->get();
-        $grouped = $project->groupBy('lc_account_id');
-        $grouped->toArray();
+        $project_lead = $project_lead_select->groupBy('lc_account_id');
+        $project_lead->toArray();
 
-        return view('lead.kanban_view', compact('grouped'));
+        // data to view
+        $data['project_lead_count']= count($project_lead_select);
+        $data['project_lead_sum']= $project_lead_select->sum('sf_budget_allocation');
+        $data['project_lead'] = $project_lead;
+
+        return $project_lead;
+
+        return view('lead.kanban_view', $data);
     }
 
     /**
@@ -95,6 +108,14 @@ class LeadController extends Controller
 
         return redirect('/lead');
 
+    }
+
+    public function save_stage($id){
+        SfStage::create([ 'sf_project_id' => $id,
+                            'sf_opstage_ref_id' => $_GET['ref-id'],
+                            'sf_opstage_startdate' => date("Y-m-d H:i:s"),
+                        ]);
+        return 'Sukses';
     }
 
     /**

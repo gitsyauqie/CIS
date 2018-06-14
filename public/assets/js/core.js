@@ -4,6 +4,12 @@ $(document).ready(function(){
 	    $('.collapse.in').toggleClass('in');
 	    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 	});
+
+	// ajax show project name
+	$('#Project_name_select').on('change', function () {
+		var name = $(this).find('option:selected').attr('nameattr');
+		$('#Project_name_show').text(name);
+	})
 })
 
 
@@ -26,3 +32,4 @@ $(".title-pop").popover({
 }).click(function(e){
 	e.preventDefault();
 });
+
