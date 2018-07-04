@@ -13,6 +13,7 @@ class SfRequirement extends Model
      */
 	protected $table = 'sf_requirement';
 	protected $primaryKey = 'sf_req_id';
+    protected $fillable = ['sf_project_id', 'sf_opstage_id', 'sf_req_desc']
 
     public function stage()
     {

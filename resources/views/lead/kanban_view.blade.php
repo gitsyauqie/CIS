@@ -153,21 +153,21 @@
 	  			<div class="col-md-12">
 	  				<h6>
    						<strong>Lead</strong>
-							<a href="#" class="float-right lead-pop" data-container="body" data-toggle="popover" data-placement="bottom">
+						<a href="#" class="float-right lead-pop" data-container="body" data-toggle="popover" data-placement="bottom">
 				  			<div class="icon-title-1"></div>
 				  			<div class="icon-title-2"></div>
 				  			<div class="icon-title-3"></div>
-							</a>
+						</a>
    					</h6>
 	  			</div>
 		  		<div class="col-md-12">
   			  		<div class="card mt-3">
   					  	<div class="card-body bg-secondary pt-2 pl-1 pr-1 pb-2">
-  					  		<strong class="text-white">Rp {{ number_format($project_lead_sum,0, ',' , '.') }}</strong> 
-  					  		<span class="text-light float-right">{{ $project_lead_count }} Deals</span>
+  					  		<strong class="text-white">Rp {{ number_format($project_lead_sum_1, 0, ',' , '.') }}</strong> 
+  					  		<span class="text-light float-right">{{ $project_lead_count_1 }} Deals</span>
   					  	</div>
   					</div>
-  					@foreach ($project_lead as $name => $projects)
+  					@foreach ($project_lead_1 as $name => $projects)
   					<div class="card mt-1">
   					  	<div class="card-body pt-1 pl-1 pr-1 pb-1 ">
   					  		<p>{{ $name }}</p>
@@ -203,11 +203,11 @@
 	  			<div class="col-md-12">
 	  				<h6>
    						<strong>Opportunity</strong>
-							<a href="#" class="float-right lead-pop" data-container="body" data-toggle="popover" data-placement="bottom">
-								<div class="icon-title-1"></div>
-								<div class="icon-title-2"></div>
-								<div class="icon-title-3"></div>
-							</a>
+						<a href="#" class="float-right lead-pop" data-container="body" data-toggle="popover" data-placement="bottom">
+							<div class="icon-title-1"></div>
+							<div class="icon-title-2"></div>
+							<div class="icon-title-3"></div>
+						</a>
    					</h6>
 	  			</div>
 	  			<div class="col-md-3 pr-sm-1 sortable sortable-connected " stage-id="2">
@@ -250,46 +250,40 @@
 	  				<p class="text-title">Solution Delivery</p>
 	  				<div class="card">
 					  	<div class="card-body pt-2 pl-1 pr-1 pb-2 bg-secondary">
-					  		<strong class="text-white">Rp 2500m</strong> 
-					  		<span class="text-light float-right">3 Deals</span>
+					  		<strong class="text-white">Rp {{ number_format($project_lead_sum_3, 0, ',' , '.') }}</strong> 
+					  		<span class="text-light float-right">{{ $project_lead_count_3 }} Deals</span>
 					  	</div>
 					</div>
-					<div class="card mt-1">
-					  	<div class="card-body pt-1 pl-1 pr-1 pb-1">
-					  		<p class="title">Bank Central Asia Tbk</p>
-					  		<div class="sortable-connected sortable" id="1">
-					  			<div class="card mt-1">
-						  			<div class="card-body pt-1 pl-1 pr-1 pb-1 bg-light">
-						  				<div>
-						  					<span><strong>EDC BCA Project</strong></span> 
-						  					<a href="#" class="float-right text-dark title-pop" data-container="body" data-toggle="popover" data-placement="bottom"><i class="fa fa-ellipsis-v"></i></a>
-						  				</div>
-						  				<div> 
-						  					<span>Rp 500m</span>
-						  				</div>
-				  					</div>
-			  					</div>
-			  				</div>
-			  			</div>
-			  		</div>
-					<div class="card mt-1">
-					  	<div class="card-body pt-1 pl-1 pr-1 pb-1">
-					  		<p class="title">Bank Mandiri</p>
-					  		<div class="sortable-connected sortable">
-					  			<div class="card mt-1">
-						  			<div class="card-body pt-1 pl-1 pr-1 pb-1 bg-light">
-						  				<div>
-						  					<span><strong>EDC BCA Project</strong></span> 
-						  					<a href="#" class="float-right text-dark title-pop" data-container="body" data-toggle="popover" data-placement="bottom"><i class="fa fa-ellipsis-v"></i></a>
-						  				</div>
-						  				<div> 
-						  					<span>Rp 500m</span>
-						  				</div>
-				  					</div>
-			  					</div>
-			  				</div>
-			  			</div>
-			  		</div>
+					@foreach ($project_lead_3 as $name => $projects)
+  					<div class="card mt-1">
+  					  	<div class="card-body pt-1 pl-1 pr-1 pb-1 ">
+  					  		<p>{{ $name }}</p>
+  					  		@foreach ($projects as $project)
+  					  		<div class="sortable-connected sortable" data-id="{{ $project->sf_project_id }}" >
+	  					  		<div class="card mb-1">
+	  					  			<div class="card-body pt-1 pl-1 pr-1 pb-1 bg-light">
+	  					  				<div>
+	  					  					<span><strong>{{ $project->sf_name }}</strong></span> 
+	  					  					<a href="#" class="float-right text-dark" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+						  					<div class="dropdown-menu" aria-labelledby="dropdown">
+											    <a class="dropdown-item" href="{{ url('project/'.$project->sf_project_id.'/3') }}">Add/Edit SF PROJECT</a>
+											    <a class="dropdown-item" href="{{ url('budget-info/'.$project->sf_project_id.'/3') }}">Add/Edit SF BUDGET INFO</a>
+											    <a class="dropdown-item" href="#">Add/Edit SF REQUIREMENT</a>
+											    <a class="dropdown-item" href="{{ url('soloffer/'.$project->sf_project_id.'/3') }}">Add/Edit SF SOLOFFERS</a>
+											    <a class="dropdown-item" href="{{ url('action-item/3')}}">Add/Edit SF ACTION ITEM</a>
+											    <a class="dropdown-item" href="#">Add/Edit SF DOCUMENT</a>
+											</div>
+	  					  				</div>
+	  					  				<div> 
+	  					  					<span>Rp {{ number_format($project->sf_budget_allocation,0, ',' , '.') }}</span>
+	  					  				</div>
+	  			  					</div>
+	  			  				</div>
+  			  				</div>
+  			  				@endforeach
+  			  			</div>
+  			  		</div>
+  					@endforeach
 	  			</div>
 	  			<div class="col-md-3 pr-sm-1 pl-md-0 pr-md-2" stage-id="4">
 	  				<p class="text-title">Negotiation</p>
@@ -378,7 +372,18 @@
 	</div>
 </div>
 
-
+<!-- List PopoverButton Popover -->
+<div class="container" id="list-solution" hidden>
+    <ul class="list-popover">
+        <li><a href="{{ url('sf_project') }}"><i class="fa fa-angle-right"></i> Add/Edit SF PROJECT</a></li>	
+        <li><a href="{{ url('sf_budget_info') }}"><i class="fa fa-angle-right"></i> Add/Edit SF BUDGET INFO</a></li>	
+        <li><a href=""><i class="fa fa-angle-right"></i> Add/Edit SF REQUIREMENT</a></li>	
+        <li><a href="{{ url('sf_soloffers') }}"><i class="fa fa-angle-right"></i> Add/Edit SF SOLOFFER</a></li>	
+        <li><a href="{{ url('sf_act') }}"><i class="fa fa-angle-right"></i> Add/Edit SF ACTION ITEM</a></li>	
+        <li><a href="{{ url('sf_document') }}"><i class="fa fa-angle-right"></i> Add/Edit SF DOCUMENT</a></li>	
+    </ul>
+</div>
+<!-- List PopoverButton Popover End-->
 
 <!-- Button PopoverButton Popover -->
 <div class="container" id="button-pop" hidden>

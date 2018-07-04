@@ -69,14 +69,7 @@
 
         
         
-        <!-- List PopoverButton Popover -->
-        <div class="container" id="list-pop" hidden>
-            <ul class="list-popover">
-                <li><a href="#"><i class="fa fa-angle-right"></i> Add Business Req</a></li>
-                <li><a href="#"><i class="fa fa-angle-right"></i> Edit Business Req</a></li>
-            </ul>
-        </div>
-        <!-- List PopoverButton Popover End-->
+        
         
         <!-- Modal-->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
