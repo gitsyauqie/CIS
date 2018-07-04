@@ -27,7 +27,7 @@
 			   			  	</button>
 			   			</div>
 			   			@endif
-			   			<form method="post" action="{{ url('update-document') }}">
+			   			<form method="post" action="{{ url('update-document') }}" enctype="multipart/form-data">
 			   				<div class="row">
 				   				<div class="col-md-6">
    				    			  	<div class="form-group row" hidden>
