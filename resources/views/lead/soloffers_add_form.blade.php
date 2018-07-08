@@ -7,7 +7,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="row">
+                <div class="row mb-5	">
                     <div class="col-md-12">
                     	<H5 class="text-danger"><strong>ADD/EDIT SOLOFFERS</strong></H5>
 			   			<hr>
@@ -76,8 +76,8 @@
 				   				<div class="col-md-12">
    				    			  	<hr>
 				   					<div class="float-right">
-							      		<button type="button" class="btn btn-danger btn-sm" onclick="window.history.back();">Cancel</button></a>
-							      		<button type="submit" class="btn btn-success btn-sm">Save</button>
+							      		<a href="{{ url('kanban') }}"><button type="button" class="btn btn-danger btn-sm">Back</button></a>
+							      		<!-- <button type="submit" class="btn btn-success btn-sm">Save</button> -->
 							      		<button type="submit" class="btn btn-secondary btn-sm">Save & View</button>
 				   						{{ csrf_field() }}
 				   					</div>
@@ -85,6 +85,37 @@
 			   				</div>
 			   			</form>
                     </div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+                		<H5 class="text-danger"><strong>SOLUTION OFFERING</strong></H5>
+                		<table class="table table-striped">
+                			<thead>
+                				<tr>
+                					<th scope="col">No</th>
+                					<th scope="col">Serial ID</th>
+                					<th scope="col">Type</th>
+                					<th scope="col">Name</th>
+                					<th scope="col">Unit Price</th>
+                					<th scope="col">Qty</th>
+                					<th scope="col">Created Date</th>
+                				</tr>
+                			</thead>
+                			<tbody>
+                				@foreach($sf_soloffers as $key => $value)
+                				<tr>
+                					<td scope="col">{{ $key + 1 }}</td>
+                					<td>{{ $value->sf_soloff_serialid }}</td>
+                					<td>{{ $value->sf_soloff_type }}</td>
+                					<td>{{ $value->sf_soloff_name }}</td>
+                					<td>{{ $value->sf_soloff_unit_price }}</td>
+                					<td>{{ $value->sf_soloff_qty }}</td>
+                					<td>{{ $value->created_at }}</td>
+                				</tr>
+                				@endforeach
+                			</tbody>
+                		</table>
+                	</div>
                 </div>
             </div>
         </div>

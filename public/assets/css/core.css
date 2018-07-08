@@ -97,14 +97,19 @@ a, a:hover, a:focus {
 }
 
 .sidebar-menu>li {
-	padding-top: 11px;
+	/*padding-top: 11px;
 	padding-left: 20px;
-	padding-bottom: 11px;
+	padding-bottom: 11px;*/
+	padding: 0;
 	border-bottom: 1px #282a2d solid !important;
 	cursor: pointer;
 }
 
 .sidebar-menu>li>a {
+	display: block;
+	padding-top: 11px;
+	padding-left: 20px;
+	padding-bottom: 11px;
 	color: #898994;
 	text-decoration: none;
 }

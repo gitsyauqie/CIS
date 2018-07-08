@@ -27,6 +27,8 @@ Route::get('/sf_document', 'LeadController@sf_document');
 Route::get('/sf_soloffers', 'LeadController@sf_soloffers');
 Route::get('/sf_act', 'LeadController@sf_act');
 
+Route::get('calendar', 'LeadController@calendar');
+
 
 
 
@@ -39,6 +41,7 @@ Route::get('/budget-info/{sf_project_id}/{sf_opstage_id}', 'LeadController@add_e
 Route::get('/requirement/{sf_project_id}/{sf_opstage_id}', 'LeadController@add_edit_requirement');
 Route::get('/soloffer/{sf_project_id}/{sf_opstage_id}', 'LeadController@add_edit_soloffer');
 Route::get('/action-item/{sf_opstage_id}', 'LeadController@add_edit_action_item');
+Route::get('/action-detail/{sf_opstage_id}', 'LeadController@detail_action_item');
 Route::get('/document/{sf_opstage_id}', 'LeadController@add_edit_document');
 
 //   Store

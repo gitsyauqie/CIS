@@ -7,7 +7,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-md-12">
                     	<H5 class="text-danger"><strong>ADD DOCUMENTS</strong></H5>
 			   			<hr>
@@ -77,6 +77,37 @@
 			   				</div>
 			   			</form>
                     </div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+                		<H5 class="text-danger"><strong>DOCUMENT ATTACHEMENT</strong></H5>
+                		<table class="table table-striped">
+	    					<thead>
+	    						<tr>
+	    							<th scope="col">No</th>
+	    							<th scope="col">Name</th>
+	    							<th scope="col">File</th>
+	    							<th scope="col">Type</th>
+	    							<th scope="col">Upload By</th>
+	    							<th scope="col">Upload Date</th>
+	    						</tr>
+	    					</thead>
+		    				<tbody>
+		    					@foreach($sf_documents as $key => $value)
+		    					<tr>
+	                              	<td scope="row">{{ $key + 1 }}</td>
+	                              	<td>{{ $value->sf_doc_name }}</td>
+	                              	<td>
+	                              		<a href="#" target="_blank">{{ $value->sf_doc_attachment }}</a>
+	                              	</td>
+	                              	<td>{{ $value->sf_doc_type }}</td>
+	                              	<td>{{ $value->sf_doc_upload_by }}</td>
+	                              	<td>{{ $value->sf_doc_upload_date }}</td>
+	                            </tr>
+	                            @endforeach
+		    				</tbody>
+	    				</table>
+                	</div>
                 </div>
             </div>
         </div>

@@ -15,21 +15,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.4.2/sweetalert2.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.4.2/sweetalert2.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}">
 </head>
 <body>
     <div id="app">
+        <!-- @auth -->
         <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light navbar-custom">
             <div class="container-fluid">
                 
-                <!-- @auth -->
                 <a href="#" class="mr-5" id="btn-toggles">
                     <div class="icon-toggle-1"></div>
                     <div class="icon-toggle-2"></div>
                     <div class="icon-toggle-2"></div>
                 </a>
-                <!-- @endauth -->
 
                 <a class="navbar-brand d-none d-sm-none d-md-block mr-5" href="#" style="margin-top: -10px; margin-bottom: -10px;">
                     <img src="{{ URL::to('img/telkomsel-logo.png') }}" width="170" height="50" alt="">
@@ -45,6 +45,7 @@
                 </div>
             </div>
         </nav> 
+        <!-- @endauth -->
         
 
         <div id="wrapper">
@@ -58,18 +59,42 @@
                     <li class=" @yield('menu_quote') "><a href="">Quote</a></li>
                 </ul>
             </div>
-            <!-- @endauth -->
             
+            <!-- @endauth -->
             <div id="content">
-            @yield('content')
+                    @yield('content')
             </div>
-
+            
+            <!-- <div id="login">
+                    @yield('login')
+            </div> -->
         </div>
     </div>
 
         
         
-        
+        <!-- List PopoverButton Popover -->
+        <div class="container" id="list-pop" hidden>
+            <ul class="list-popover">
+                <li><a href="#"><i class="fa fa-angle-right"></i> Add Business Req</a></li>
+                <li><a href="#"><i class="fa fa-angle-right"></i> Edit Business Req</a></li>
+            </ul>
+        </div>
+
+        <div class="container" id="list-solution" hidden>
+            <ul class="list-popover">
+                <li><a href="#"><i class="fa fa-angle-right"></i> Add Business Req</a></li>
+                <li><a href="#"><i class="fa fa-angle-right"></i> Edit Business Req</a></li>
+            </ul>
+        </div>
+
+        <div class="container" id="list-negotiation" hidden>
+            <ul class="list-popover">
+                <li><a href="#"><i class="fa fa-angle-right"></i> Add Business Req</a></li>
+                <li><a href="#"><i class="fa fa-angle-right"></i> Edit Business Req</a></li>
+            </ul>
+        </div>
+        <!-- List PopoverButton Popover End-->
         
         <!-- Modal-->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -115,6 +140,10 @@
         <script src="{{ asset('assets/js/core.js') }}"></script>
 
         <script>
+
+            $(document).ready(function() {
+                $('.select2').select2();
+            });
             
             $( function() {
 

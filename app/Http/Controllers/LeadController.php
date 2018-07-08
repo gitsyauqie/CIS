@@ -10,6 +10,7 @@ use App\Model\SfSoloffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Calendar;
 
 class LeadController extends Controller
 {
@@ -53,7 +54,7 @@ class LeadController extends Controller
                         ->leftjoin('sf_stage', 'sf_stage.sf_project_id', '=', 'sf_project.sf_project_id')
                         ->leftjoin('sf_stage_reference', 'sf_stage_reference.sf_opstage_ref_id', '=', 'sf_stage.sf_opstage_ref_id')
                         ->leftjoin('sf_budget_info', 'sf_budget_info.sf_opstage_id', '=', 'sf_stage.sf_opstage_id')
-                        ->select('legal_company.lc_id','sf_project.sf_project_id','sf_project.sf_name','legal_company.lc_account_id','sf_budget_info.sf_budget_allocation')
+                        ->select('legal_company.lc_id','sf_project.sf_project_id','sf_project.sf_name','legal_company.lc_account_id','sf_budget_info.sf_budget_allocation', 'sf_stage.sf_opstage_id')
                         ->orderBy('sf_stage.sf_opstage_startdate', 'desc')
                         ->where('sf_stage_reference.sf_opstage_ref_id', '=', $stage)
                         ->get();
@@ -66,7 +67,7 @@ class LeadController extends Controller
         $project_lead_select_1 = $this->get_kanban(1);
         $project_lead_1 = $project_lead_select_1->groupBy('lc_account_id');
         $project_lead_1->toArray();
-
+        
         // data to view
         $data['project_lead_count_1']= count($project_lead_select_1);
         $data['project_lead_sum_1']= $project_lead_select_1->sum('sf_budget_allocation');
@@ -205,10 +206,12 @@ class LeadController extends Controller
     /*--------------------SF Requirement Section--------------------*/
     public function add_edit_requirement($sf_project_id, $sf_opstage_id)
     {
+        
         $row = DB::table('sf_requirement')
                             ->where('sf_project_id', $sf_project_id)
                             ->where('sf_opstage_id', $sf_opstage_id)
                             ->first();
+        //print_r($row); die();
         if ($row) {
             $data['sf_project_id'] = $sf_project_id;
             $data['sf_opstage_id'] = $sf_opstage_id;
@@ -263,22 +266,20 @@ class LeadController extends Controller
     {
         
         $row = DB::table('sf_soloffers')
+                            ->select('sf_soloff_serialid',
+                                     'sf_soloff_type',
+                                     'sf_soloff_name',
+                                     'sf_soloff_unit_price',
+                                     'sf_soloff_qty',
+                                     'created_at')
                             ->where('sf_project_id', $sf_project_id)
                             ->where('sf_opstage_id', $sf_opstage_id)
-                            ->first();
-        if ($row) {
-            $data['sf_project_id'] = $sf_project_id;
-            $data['sf_opstage_id'] = $sf_opstage_id;
-            $data['row']           = $row;
+                            ->get();
+        $data['sf_project_id'] = $sf_project_id;
+        $data['sf_opstage_id'] = $sf_opstage_id;
+        $data['sf_soloffers']  = $row;
 
-            return view('lead.soloffers_edit_form', $data);
-        }
-        else {
-            $data['sf_project_id'] = $sf_project_id;
-            $data['sf_opstage_id'] = $sf_opstage_id;
-
-            return view('lead.soloffers_add_form', $data);
-        }
+        return view('lead.soloffers_add_form', $data);
         
     }
 
@@ -292,7 +293,7 @@ class LeadController extends Controller
                       'sf_soloff_name'       => $request->sf_soloff_name,
                       'sf_soloff_unit_price' => $request->sf_soloff_unit_price,
                       'sf_soloff_qty'        => $request->sf_soloff_qty);
-        
+        //print_r($data); die();
         $insert = DB::table('sf_soloffers')->insert($data);
 
         if ($insert) {
@@ -323,23 +324,44 @@ class LeadController extends Controller
     }
     
     /*----------------------SF Action Item Section----------------------*/
-    public function add_edit_action_item($sf_opstage_id) 
+    public function stage($sf_opstage_ref_id) 
     {
-        $row = DB::table('sf_act_item')
-                            ->where('sf_opstage_id', $sf_opstage_id)
-                            ->first();
-       
-        if ($row) {
-            $data['sf_opstage_id'] = $sf_opstage_id;
-            $data['row']           = $row;
-
-            return view('lead.act_edit_form', $data);
+        if ($sf_opstage_ref_id == 1) {
+            return 'Lead';
+        }
+        else if ($sf_opstage_ref_id == 2) {
+            return 'Opportunity';
+        }
+        else if ($sf_opstage_ref_id == 3) {
+            return 'Solution Delivery';
+        }
+        else if ($sf_opstage_ref_id == 4) {
+            return 'Negotiation';
         }
         else {
-            $data['sf_opstage_id'] = $sf_opstage_id;
-
-            return view('lead.act_add_form', $data);
+            return 'Not Stage';
         }
+    }
+
+    public function add_edit_action_item($sf_opstage_id) 
+    {
+
+        $row = DB::table('sf_act_item')
+                            ->leftjoin('sf_stage', 'sf_stage.sf_opstage_id', '=', 'sf_act_item.sf_opstage_id')
+                            ->select('sf_act_item.sf_opstage_id',
+                                     'sf_act_item.sf_act_name',
+                                     'sf_act_item.sf_act_type',
+                                     'sf_act_item.sf_act_description',
+                                     'sf_act_item.sf_act_assigned',
+                                     'sf_act_item.sf_act_latest_status',
+                                     'sf_act_item.sf_act_latest_update',
+                                     'sf_act_item.sf_act_status',
+                                     'sf_stage.sf_opstage_ref_id')
+                            ->where('sf_act_item.sf_opstage_id', $sf_opstage_id)
+                            ->get();
+        $data['sf_opstage_id'] = $sf_opstage_id;
+        $data['sf_act_item']   = $row;
+        return view('lead.act_add_form', $data);
     }
 
     public function store_action_item(Request $request) 
@@ -365,7 +387,8 @@ class LeadController extends Controller
         }
     }
 
-    public function update_action_item(Request $request) {
+    public function update_action_item(Request $request) 
+    {
         
         $data = array('sf_act_name'             => $request->sf_act_name,
                       'sf_act_type'             => $request->sf_act_type,
@@ -392,20 +415,18 @@ class LeadController extends Controller
     public function add_edit_document($sf_opstage_id) 
     {
         $row = DB::table('sf_documents')
+                            ->select('sf_doc_name',
+                                     'sf_doc_attachment',
+                                     'sf_doc_type',
+                                     'sf_doc_upload_by',
+                                     'sf_doc_upload_date')
                             ->where('sf_opstage_id', $sf_opstage_id)
-                            ->first();
+                            ->get();
 
-        if ($row) {
-            $data['sf_opstage_id'] = $sf_opstage_id;
-            $data['row']           = $row;
-
-            return view('lead.document_edit_form', $data);
-        }
-        else {
-            $data['sf_opstage_id'] = $sf_opstage_id;
-
-            return view('lead.document_add_form', $data);
-        }
+        $data['sf_opstage_id'] = $sf_opstage_id;
+        $data['sf_documents']  = $row;
+        
+        return view('lead.document_add_form', $data);
         
     }
 
@@ -413,9 +434,11 @@ class LeadController extends Controller
     {
         $path      = $request->file('sf_doc_attachment')->store('file');
         $file_name = explode("/", $path)[1];
-        
+        $file_type = explode(".", $path)[1];
+
         $data = array('sf_opstage_id'           => $request->sf_opstage_id,
                       'sf_doc_name'             => $request->sf_doc_name,
+                      'sf_doc_type'             => $file_type,
                       'sf_doc_attachment'       => $file_name,
                       'sf_doc_upload_by'        => $request->sf_doc_upload_by,
                       'sf_doc_upload_date'      => $request->sf_doc_upload_date.' '.$request->time);
@@ -437,6 +460,7 @@ class LeadController extends Controller
         $file_name = explode("/", $path)[1];
     
         $data = array('sf_doc_name'             => $request->sf_doc_name,
+                      'sf_doc_type'             => $request->sf_doc_type,
                       'sf_doc_attachment'       => $file_name,
                       'sf_doc_upload_by'        => $request->sf_doc_upload_by,
                       'sf_doc_upload_date'      => $request->sf_doc_upload_date.' '.$request->time);
@@ -451,5 +475,78 @@ class LeadController extends Controller
         else {
             return redirect()->back()->with('danger', 'Process update error!');
         }
+    }
+
+     /*--------------------Budget Section--------------------*/
+    // public function add_edit_budget_info($sf_opstage_id) 
+    // {
+    //     $row = DB::table('sf_budget_info')
+    //                         ->where('sf_opstage_id', $sf_opstage_id)
+    //                         ->get();
+
+    //     $data['sf_opstage_id'] = $sf_opstage_id;
+    //     $data['sf_budget_info']  = $row;
+        
+    //     return view('lead.budget_add_form', $data);
+        
+    // }
+
+    // public function store_budget_info(Request $request) 
+    // {
+
+    //     $data = array('sf_opstage_id'           => $request->sf_opstage_id,
+    //                   'sf_doc_name'             => $request->sf_doc_name,
+    //                   'sf_doc_type'             => $file_type,
+    //                   'sf_doc_attachment'       => $file_name,
+    //                   'sf_doc_upload_by'        => $request->sf_doc_upload_by,
+    //                   'sf_doc_upload_date'      => $request->sf_doc_upload_date.' '.$request->time);
+        
+    //     $insert = DB::table('sf_budget_info')->insert($data);
+
+    //     if ($insert) {
+    //         return redirect()->back()->with('success', 'Process entri successed!');
+    //     }
+    //     else {
+    //         return redirect()->back()->with('danger', 'Process entri error!');
+    //     }
+    // }
+
+    // public function update_budget_info(Request $request) 
+    // {
+        
+    
+    //     $data = array('sf_doc_name'             => $request->sf_doc_name,
+    //                   'sf_doc_type'             => $request->sf_doc_type,
+    //                   'sf_doc_attachment'       => $file_name,
+    //                   'sf_doc_upload_by'        => $request->sf_doc_upload_by,
+    //                   'sf_doc_upload_date'      => $request->sf_doc_upload_date.' '.$request->time);
+        
+    //     $update = DB::table('sf_budget_info')
+    //                     ->where('sf_doc_id' , $request->sf_doc_id)
+    //                     ->update($data);
+
+    //     if ($update) {
+    //         return redirect()->back()->with('success', 'Process update successed!');
+    //     }
+    //     else {
+    //         return redirect()->back()->with('danger', 'Process update error!');
+    //     }
+    // }
+
+    public function calendar(){
+      
+      $sf_act_history = DB::table('sf_ach_history')->get();
+      $act_history_list = [];
+      foreach ($sf_act_history as $key => $history) {
+        $act_history_list[] = Calendar::event(
+                $history->sf_acthist_feedback,
+                true,
+                new \DateTime($history->created_at),
+                new \DateTime($history->updated_at.' +1 day')
+            );
+      }
+      $calendar_details = Calendar::addEvents($act_history_list); 
+ 
+        return view('lead.calendar', compact('calendar_details') );
     }
 }
